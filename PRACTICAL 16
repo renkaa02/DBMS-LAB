@@ -1,0 +1,43 @@
+CREATE OR REPLACE PROCEDURE min_max_salary
+AS
+    min_salary emp2.salary%TYPE;
+    max_salary emp2.salary%TYPE;
+BEGIN
+    SELECT MIN(salary), MAX(salary) INTO min_salary, max_salary FROM emp2;
+    min_salary := max_salary / 10;
+    max_salary := min_salary * 10;
+END;
+/
+Procedure created.
+---------------------------------------------------------------------------------------------------
+
+CONVERT IT INTO TRIGGER
+
+create or replace trigger min_max_salary
+before insert or update on emp2
+for each row
+declare
+    min_salary emp2.salary%type;
+    max_salary emp2.salary%type;
+begin
+    select min(salary), max(salary)
+    into min_salary, max_salary
+    from emp2;
+
+    min_salary := max_salary / 10;
+    max_salary := min_salary * 10;
+end;
+/
+
+Trigger created.
+
+SQL> set serveroutput on;
+SQL> begin
+  2      dbms_output.put_line('hello');
+  3  end;
+  4  /
+hello
+
+PL/SQL procedure successfully completed.
+-------------------------------------------------------------------------------------------------------------------
+
